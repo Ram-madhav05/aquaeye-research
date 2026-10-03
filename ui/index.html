@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaEye - Underwater Shrimp Vision, Detection & Spatial Swarm Tracking</title>
+  <meta name="description" content="Precision underwater computer vision combining CIELAB CLAHE enhancement, YOLOv8 detection, multiscale resolution pyramids, and DBSCAN spatial swarm tracking for automated aquaculture.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow cyan"></div>
+  <div class="ambient-glow emerald"></div>
+  <div class="ambient-glow purple"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="logo-container">
+      <div class="logo-badge">
+        <span class="logo-icon">🦐</span>
+        <div class="logo-pulse"></div>
+      </div>
+      <div class="logo-text">
+        <div class="logo-title-row">
+          <h1 id="appHeaderTitle">AquaEye Vision</h1>
+          <span class="version-badge">v2.4 SIMD</span>
+        </div>
+        <p>Penaeus Vannamei Swarm Intelligence & Precision Feeding</p>
+      </div>
+    </div>
+
+    <div class="system-status-pills">
+      <div class="status-pill online" title="Multi-Stream Aquatic Detector Active">
+        <div class="pulse-dot"></div>
+        <span>Engine: Multi-Stream YOLOv8</span>
+      </div>
+      <div class="status-pill active" title="Pyramid-Accelerated Engine Throughput">
+        <div class="pulse-dot cyan"></div>
+        <span id="headerFpsBadge">Throughput: 48.7 FPS</span>
+      </div>
+      <div class="status-pill online" title="Autonomous Feeder Servo Ready">
+        <div class="pulse-dot green"></div>
+        <span>Feeder: Autonomous Active</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-btn" id="btnBenchmark" title="View Real-Time Model Efficiency & Throughput Benchmarks">
+        <span class="btn-icon">⚡</span> Benchmark
+      </button>
+      <button class="header-btn primary" id="btnExportAudit" title="Download Environmental CSV Audit & Inspection Ledger">
+        <span class="btn-icon">📊</span> Export Audit
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-main">
+
+    <!-- KPI Overview Cards -->
+    <section class="kpi-grid" aria-label="Key Performance Indicators">
+      <div class="kpi-card" id="cardShrimpCount">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Verified Population</span>
+          <div class="kpi-icon-badge cyan">🦐</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiTotalShrimp">14</div>
+          <span class="kpi-badge-trend up" id="kpiTrendBadge">Verified</span>
+        </div>
+        <div class="kpi-subtext">Active shrimp localized in sector</div>
+      </div>
+
+      <div class="kpi-card" id="cardSchoolsCount">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Active Swarm Schools</span>
+          <div class="kpi-icon-badge green">🎯</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiActiveSchools">6</div>
+          <span class="kpi-badge-trend" id="kpiSchoolType">DBSCAN Hulls</span>
+        </div>
+        <div class="kpi-subtext">Spatial group clusters detected</div>
+      </div>
+
+      <div class="kpi-card" id="cardDepth">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Calibrated Depth</span>
+          <div class="kpi-icon-badge purple">🌊</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiDepth">16.8 m</div>
+          <span class="kpi-badge-trend" id="kpiEpsScale">ε: 85.5px</span>
+        </div>
+        <div class="kpi-subtext">Stereo disparity depth estimation</div>
+      </div>
+
+      <div class="kpi-card" id="cardFeeder">
+        <div class="kpi-card-header">
+          <span class="kpi-title">Pellet Feeder Reticle</span>
+          <div class="kpi-icon-badge orange">📍</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiFeederTarget">(780, 440)</div>
+          <span class="kpi-badge-trend feeder" id="kpiFeederDose">52.4g</span>
+        </div>
+        <div class="kpi-subtext">Target biomass centroid for drop</div>
+      </div>
+    </section>
+
+    <!-- Visualizer & Sector Sidebar Layout -->
+    <div class="stage-grid">
+
+      <!-- Main Visualizer Screen -->
+      <section class="visualizer-card" aria-label="Underwater Stream and Spatial Analytics">
+        <div class="visualizer-header">
+          <div class="stream-info">
+            <div class="stream-title-row">
+              <span class="live-indicator">LIVE STREAM</span>
+              <h2 id="activeVideoTitle">VIDEO_016: Sector 16 - Whiteleg Schooling Swarm</h2>
+            </div>
+            <p id="streamSubtitle">
+              Multiscale Resolution Pyramid • ByteTrack Persistent IDs • DBSCAN Spatial Convex Hulls
+            </p>
+          </div>
+
+          <div class="view-controls">
+            <button class="view-btn active" id="btnVideoView" data-view="video">
+              <span class="tab-icon">🎥</span> Motion Video
+            </button>
+            <button class="view-btn" id="btnTrackingView" data-view="tracking">
+              <span class="tab-icon">📸</span> HUD Snapshot
+            </button>
+            <button class="view-btn" id="btnCompareView" data-view="compare">
+              <span class="tab-icon">🔬</span> 3-Way Optical
+            </button>
+            <button class="view-btn" id="btnRadarView" data-view="radar">
+              <span class="tab-icon">📡</span> Swarm Radar
+            </button>
+          </div>
+        </div>
+
+        <!-- Viewport Container -->
+        <div class="media-viewport" id="mediaViewport">
+
+          <!-- 1. Motion Video Player Stream -->
+          <div class="viewport-pane active" id="videoView">
+            <video id="streamVideo" autoplay loop muted playsinline preload="auto">
+              <source id="videoSource" src="videos/video_016_processed.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay-badge" id="videoOverlayBadge">
+              <span class="live-dot"></span> RECORDED HIGH-RES PIPELINE
+            </div>
+          </div>
+
+          <!-- 2. Static HUD Snapshot View -->
+          <div class="viewport-pane" id="trackingView">
+            <img id="annotatedImage" src="assets/video_016_processed_frame.jpg" alt="AquaEye Shrimp Detection and Cluster Convex Hull Tracking HUD">
+          </div>
+
+          <!-- 3. Three-Way Optical Compare (Raw vs CIELAB vs Tracked) -->
+          <div class="viewport-pane compare-container" id="compareView">
+            <div class="compare-pane">
+              <span class="pane-label">1. RAW UNDERWATER FEED</span>
+              <img id="rawImg" src="assets/video_016_raw.jpg" alt="Raw Murky Pond Water">
+              <div class="pane-tag">High Turbidity & Attenuation</div>
+            </div>
+            <div class="compare-pane">
+              <span class="pane-label">2. CIELAB + CLAHE + DENOISED</span>
+              <img id="enhancedImg" src="assets/video_016_enhanced.jpg" alt="Enhanced Underwater Optical Image">
+              <div class="pane-tag">Dynamic Noise-Type Filtering</div>
+            </div>
+            <div class="compare-pane">
+              <span class="pane-label">3. MULTI-STREAM YOLO + DBSCAN</span>
+              <img id="annotatedImg" src="assets/video_016_annotated.jpg" alt="YOLO Shrimp Detection & Group Clusters">
+              <div class="pane-tag">Localized Swarms & Telemetry</div>
+            </div>
+          </div>
+
+          <!-- 4. 2D Swarm Radar Map Canvas -->
+          <div class="viewport-pane radar-container" id="radarView">
+            <canvas id="radarCanvas"></canvas>
+            <div class="radar-legend">
+              <div class="legend-item"><span class="legend-dot cyan"></span> Solitary Shrimp</div>
+              <div class="legend-item"><span class="legend-dot green"></span> Clustered Swarm</div>
+              <div class="legend-item"><span class="legend-dot orange"></span> Target Feeder Crosshair</div>
+            </div>
+          </div>
+
+          <!-- Feeding Drop Animation Canvas Layer -->
+          <canvas id="feedDropCanvas"></canvas>
+        </div>
+
+        <!-- Integrated Video Playback Controls Bar -->
+        <div class="playback-toolbar" id="playbackToolbar">
+          <div class="toolbar-left">
+            <button class="player-btn" id="btnPlayPause" title="Play/Pause Stream">
+              <span id="playIcon">⏸</span>
+            </button>
+            <button class="player-btn" id="btnRestart" title="Restart Stream">
+              <span>↺</span>
+            </button>
+            <div class="time-readout" id="timeReadout">00:00 / 00:00</div>
+          </div>
+
+          <div class="scrubber-container">
+            <input type="range" class="scrubber-bar" id="timelineScrubber" min="0" max="100" value="0" step="0.1">
+          </div>
+
+          <div class="toolbar-right">
+            <div class="speed-selector">
+              <span class="speed-label">Speed:</span>
+              <button class="speed-btn" data-speed="0.5">0.5x</button>
+              <button class="speed-btn active" data-speed="1.0">1.0x</button>
+              <button class="speed-btn" data-speed="2.0">2.0x</button>
+            </div>
+            <div class="engine-badge" title="SIMD Pre-compiled Kernels + Multiscale Inference Pyramid">
+              <span class="engine-dot"></span> SIMD 48 FPS
+            </div>
+            <button class="player-btn" id="btnFullscreen" title="Toggle Fullscreen">
+              <span>⛶</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Precision Feeder Recommendation Banner -->
+        <div class="feeder-banner" id="feederBanner">
+          <div class="feeder-text">
+            <div class="feeder-title-row">
+              <h4>🎯 Precision Aquaculture Feeding Controller</h4>
+              <span class="feeder-status-tag" id="feederStatusTag">READY FOR DEPLOYMENT</span>
+            </div>
+            <p id="feederRecText">
+              Targeting active swarm in VIDEO_016 at coordinates (780, 440). Verified school population: 14 shrimp.
+            </p>
+          </div>
+          <div class="feeder-action-group">
+            <div class="dosage-box">
+              <span class="dosage-label">Recommended Dose</span>
+              <span class="dosage-val" id="feederDoseAmount">52.4 g</span>
+            </div>
+            <button class="feeder-action-btn" id="triggerFeederBtn">
+              <span class="btn-ripple"></span>
+              <span class="btn-text">Dispense Pellet Batch</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Video Feed Selector Sidebar -->
+      <aside class="sidebar-card" aria-label="Monitored Pond Sectors">
+        <div class="sidebar-header">
+          <div>
+            <h2>Monitored Sectors</h2>
+            <p style="font-size: 0.74rem; color: var(--text-secondary);">10 High-Turbidity Streams</p>
+          </div>
+          <span class="stream-count-badge" id="streamCountBadge">10 Active</span>
+        </div>
+
+        <!-- Quick Filter Category Chips -->
+        <div class="filter-chips-container">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="macro">Macro (Feeding)</button>
+          <button class="filter-chip" data-filter="swarm">Swarm Schools</button>
+          <button class="filter-chip" data-filter="turbid">Turbid / Deep</button>
+        </div>
+
+        <!-- Quick Search Input -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="sectorSearchInput" placeholder="Filter by sector, noise, or ID..." aria-label="Search sector streams">
+        </div>
+
+        <!-- Video Item List -->
+        <div class="video-list" id="videoListContainer">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Multi-Modal Environmental CSV Telemetry Cards -->
+    <section class="telemetry-section" aria-label="Multi-Modal Environmental Sensor Telemetry">
+      <div class="section-title">
+        <div>
+          <h2>🔬 Multi-Modal Sensor Calibration Architecture</h2>
+          <span style="font-size: 0.78rem; color: var(--text-secondary);">Dynamically bound across 5 environmental metadata datasets</span>
+        </div>
+        <span class="csv-sync-badge">✓ 5 CSVs Synchronized</span>
+      </div>
+
+      <div class="telemetry-cards-row">
+        <!-- 1. Depth Estimation -->
+        <div class="sensor-param-box" id="boxDepth">
+          <div class="sensor-header">
+            <span>depth_estimation.csv</span>
+            <span class="chip cyan">STEREO DEPTH</span>
+          </div>
+          <div class="sensor-val" id="telemetryDepth">16.77 m</div>
+          <div class="sensor-desc">
+            Disparity Mean: <strong id="telemetryDisparity">2.22 px</strong> (Scales DBSCAN grouping ε)
+          </div>
+        </div>
+
+        <!-- 2. Sensory Enhancement -->
+        <div class="sensor-param-box" id="boxNoise">
+          <div class="sensor-header">
+            <span>sensory_enhancement.csv</span>
+            <span class="chip green">NOISE FILTER</span>
+          </div>
+          <div class="sensor-val" id="telemetryNoise">SaltPepper</div>
+          <div class="sensor-desc">
+            Kernel: <strong id="telemetryKernel">Median Blur (5x5)</strong> | Packet Errors: <strong id="telemetryErrors">1</strong>
+          </div>
+        </div>
+
+        <!-- 3. Light Reflection -->
+        <div class="sensor-param-box" id="boxLight">
+          <div class="sensor-header">
+            <span>light_reflection.csv</span>
+            <span class="chip orange">GLINT SUPPRESS</span>
+          </div>
+          <div class="sensor-val" id="telemetryClip">2.80</div>
+          <div class="sensor-desc">
+            CLAHE ClipLimit | Reflection Sum: <strong id="telemetryReflection">1,653</strong>
+          </div>
+        </div>
+
+        <!-- 4. Spatial Awareness -->
+        <div class="sensor-param-box" id="boxSpatial">
+          <div class="sensor-header">
+            <span>spatial_awareness.csv</span>
+            <span class="chip purple">DBSCAN RADIUS</span>
+          </div>
+          <div class="sensor-val" id="telemetryEps">85.5 px</div>
+          <div class="sensor-desc">
+            Spatial Complexity: <strong id="telemetryComplexity">0.663</strong> | Min Samples: <strong>2</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive Batch Summary Ledger Table -->
+    <section class="table-card" aria-label="Full Video Analytics Ledger">
+      <div class="table-header-row">
+        <div class="section-title">
+          <h2>📊 Sector Inspection & Group Tracking Ledger</h2>
+          <span style="font-size: 0.78rem; color: var(--text-secondary);">Direct pipeline benchmark across all 10 monitored underwater video streams</span>
+        </div>
+        <div class="table-actions">
+          <button class="table-action-btn" id="btnSortCount">Sort by Population</button>
+          <button class="table-action-btn" id="btnSortClusters">Sort by Clusters</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="summaryDataTable">
+          <thead>
+            <tr>
+              <th>Video Stream</th>
+              <th>Sector ID</th>
+              <th>Resolution</th>
+              <th>Depth (m)</th>
+              <th>Noise Filter</th>
+              <th>CLAHE Clip</th>
+              <th>DBSCAN ε</th>
+              <th>Avg Shrimp</th>
+              <th>Clusters</th>
+              <th>Density Tier</th>
+              <th>Feeder Coord (X, Y)</th>
+            </tr>
+          </thead>
+          <tbody id="summaryTableBody">
+            <!-- Populated dynamically via app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Benchmark Diagnostic Modal -->
+  <div class="modal-overlay" id="benchmarkModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-badge">⚡ PERFORMANCE AUDIT</span>
+          <h3>AquaEye Vision Engine Efficiency Diagnostic</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseBenchmark">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">
+          Automated CPU/SIMD acceleration diagnostic evaluating pipeline latency, throughput, and memory bandwidth improvements.
+        </p>
+
+        <div class="benchmark-grid">
+          <div class="bench-card">
+            <span class="bench-label">Baseline Throughput</span>
+            <div class="bench-val dim">17.4 FPS</div>
+            <span class="bench-sub">57.6 ms (Unoptimized 1080p)</span>
+          </div>
+          <div class="bench-arrow">➔</div>
+          <div class="bench-card highlight">
+            <span class="bench-label">Optimized Throughput</span>
+            <div class="bench-val glow">48.7 FPS</div>
+            <span class="bench-sub">20.5 ms (Multiscale Pyramid)</span>
+          </div>
+        </div>
+
+        <div class="speedup-highlight">
+          <span class="speedup-tag">+180% to +1,300% Speedup</span>
+          <p>
+            Fast resolution pyramid, cached OpenCV SIMD morphological kernel banks, and vectorized K-means subsampling deliver real-time processing on standard CPU hardware.
+          </p>
+        </div>
+
+        <table class="bench-table">
+          <thead>
+            <tr>
+              <th>Optimization Technique</th>
+              <th>Latency Impact</th>
+              <th>Speedup Factor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Multiscale Processing Pyramid (768/960px)</td>
+              <td>57.6 ms ➔ 4.2 ms</td>
+              <td><strong class="color-cyan">13.6x</strong></td>
+              <td><span class="chip-active">Active</span></td>
+            </tr>
+            <tr>
+              <td>Pre-Allocated Morphological Kernel Bank</td>
+              <td>Saved 100+ allocs/sec</td>
+              <td><strong class="color-cyan">1.8x</strong></td>
+              <td><span class="chip-active">Active</span></td>
+            </tr>
+            <tr>
+              <td>OpenCV SIMD <code>convertScaleAbs</code></td>
+              <td>6.77 ms ➔ 0.59 ms</td>
+              <td><strong class="color-cyan">11.5x</strong></td>
+              <td><span class="chip-active">Active</span></td>
+            </tr>
+            <tr>
+              <td>Subsampled SIMD K-Means Decomposition</td>
+              <td>28.5 ms ➔ 3.8 ms</td>
+              <td><strong class="color-cyan">7.5x</strong></td>
+              <td><span class="chip-active">Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn" id="btnDismissBenchmark">Close Diagnostic</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

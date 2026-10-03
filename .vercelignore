@@ -1,0 +1,15 @@
+.git/
+.venv/
+artifacts/
+**/node_modules/
+**/.next/
+**/__pycache__/
+**/*.pt
+**/*.mp4
+**/*.MP4
+**/*.mov
+**/*.MOV
+**/*.avi
+**/*.mkv
+ui/
+notebooks/

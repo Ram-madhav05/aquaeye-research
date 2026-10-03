@@ -1,0 +1,11 @@
+video_name,video_id,resolution,depth_m,noise_type,clahe_clip,dbscan_eps,total_frames,average_shrimp_count,max_clusters_detected
+"sample_01.mp4","video_001","640x480","17.19","Poisson","1.4","35.0","50","6.9","0"
+"video_008.mp4","video_008","1568x886","1.36","Impulse","2.55","160.0","50","1.1","1"
+"video_013.mp4","video_013","886x496","2.99","Impulse","2.44","160.0","50","2.04","0"
+"video_016.mp4","video_016","1568x886","16.77","SaltPepper","2.8","85.5","50","4.68","0"
+"video_018.mp4","video_018","1568x886","15.64","Speckle","2.71","91.6","50","0.62","0"
+"video_019.mp4","video_019","1568x886","29.91","SaltPepper","1.69","47.9","50","4.36","0"
+"video_020.mp4","video_020","1920x886","3.97","SaltPepper","3.21","160.0","50","34.28","5"
+"video_023.mp4","video_023","1024x768","22.33","Impulse","2.98","157.2","50","4.76","1"
+"video_024.mov","video_024","800x600","24.68","Gaussian","2.44","142.2","50","24.44","3"
+"video_032.mp4","video_032","1920x1080","1.9","Poisson","2.37","160.0","50","5.54","1"

@@ -1,0 +1,62 @@
+[
+  {
+    "video": "sample_01_processed.mp4",
+    "frame_path": "assets/sample_01_processed_frame.jpg",
+    "width": 640,
+    "height": 480
+  },
+  {
+    "video": "video_008_processed.mp4",
+    "frame_path": "assets/video_008_processed_frame.jpg",
+    "width": 1568,
+    "height": 886
+  },
+  {
+    "video": "video_013_processed.mp4",
+    "frame_path": "assets/video_013_processed_frame.jpg",
+    "width": 886,
+    "height": 496
+  },
+  {
+    "video": "video_016_processed.mp4",
+    "frame_path": "assets/video_016_processed_frame.jpg",
+    "width": 1568,
+    "height": 886
+  },
+  {
+    "video": "video_018_processed.mp4",
+    "frame_path": "assets/video_018_processed_frame.jpg",
+    "width": 1568,
+    "height": 886
+  },
+  {
+    "video": "video_019_processed.mp4",
+    "frame_path": "assets/video_019_processed_frame.jpg",
+    "width": 1568,
+    "height": 886
+  },
+  {
+    "video": "video_020_processed.mp4",
+    "frame_path": "assets/video_020_processed_frame.jpg",
+    "width": 1920,
+    "height": 886
+  },
+  {
+    "video": "video_023_processed.mp4",
+    "frame_path": "assets/video_023_processed_frame.jpg",
+    "width": 1024,
+    "height": 768
+  },
+  {
+    "video": "video_024_processed.mp4",
+    "frame_path": "assets/video_024_processed_frame.jpg",
+    "width": 800,
+    "height": 600
+  },
+  {
+    "video": "video_032_processed.mp4",
+    "frame_path": "assets/video_032_processed_frame.jpg",
+    "width": 1920,
+    "height": 1080
+  }
+]
