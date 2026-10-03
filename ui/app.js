@@ -294,8 +294,8 @@ function renderSidebarList() {
 
   const filtered = VIDEO_DATA.filter(v => {
     const matchesFilter = activeFilter === "all" || v.category === activeFilter;
-    const matchesSearch = searchTerm === "" || 
-      v.id.toLowerCase().includes(searchTerm) || 
+    const matchesSearch = searchTerm === "" ||
+      v.id.toLowerCase().includes(searchTerm) ||
       v.title.toLowerCase().includes(searchTerm) ||
       v.noise_type.toLowerCase().includes(searchTerm);
     return matchesFilter && matchesSearch;
@@ -374,7 +374,7 @@ function selectVideo(videoId) {
   document.getElementById("telemetryComplexity").innerText = currentVideo.complexity_score.toFixed(3);
 
   // Update Feeder Recommendation Banner
-  document.getElementById("feederRecText").innerText = 
+  document.getElementById("feederRecText").innerText =
     `Targeting biomass concentration in ${currentVideo.id.toUpperCase()} at coordinates (${currentVideo.feeder_target[0]}, ${currentVideo.feeder_target[1]}). Verified school population: ${shrimpPop} shrimp.`;
   document.getElementById("feederDoseAmount").innerText = `${doseGrams} g`;
 
@@ -687,7 +687,7 @@ function setupFeederControls() {
     startFeedDropAnimation(() => {
       statusTag.innerText = "FEEDING COMPLETE ✓";
       statusTag.className = "feeder-status-tag";
-      
+
       setTimeout(() => {
         statusTag.innerText = "READY FOR DEPLOYMENT";
         triggerBtn.disabled = false;
@@ -849,7 +849,7 @@ function setupExportAudit() {
       v.peak_clusters, `"${v.density_category}"`, v.feeder_target[0], v.feeder_target[1]
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," + 
+    const csvContent = "data:text/csv;charset=utf-8," +
       [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
 
     const encodedUri = encodeURI(csvContent);

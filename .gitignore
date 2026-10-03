@@ -21,3 +21,6 @@ venv/
 .DS_Store
 artifacts/
 runs/
+
+.vercel
+.env*

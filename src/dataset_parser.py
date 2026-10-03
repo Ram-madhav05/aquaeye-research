@@ -79,7 +79,7 @@ class DatasetParser:
             clean = stem.replace("video_", "").replace("video", "")
             if clean.isdigit():
                 return f"video_{int(clean):03d}"
-        
+
         return stem
 
     def _build_master_dataframe(self) -> pd.DataFrame:
@@ -161,7 +161,7 @@ class DatasetParser:
             if not match.empty:
                 row = match.iloc[0]
                 params["metadata_matched"] = True
-                
+
                 # 1. Sensory Enhancement CSV
                 if "noise_type" in row and pd.notna(row["noise_type"]):
                     params["noise_type"] = str(row["noise_type"]).strip()
