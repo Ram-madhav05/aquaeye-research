@@ -188,7 +188,7 @@ class ShrimpGroupTracker:
         - Stream 2: Translucent / High-Contrast Optical Saliency (P. vannamei bodies)
         - Stream 3: Motion Foreground (MOG2)
         - Stream 4: Custom YOLO if loaded
-        Utilizes multiscale resolution pyramid scaling for 10x-15x inference speedup on 1080p/4K feeds.
+        Downscales high-resolution frames before candidate extraction; measure speed on target hardware.
         """
         candidate_boxes = []
         candidate_confs = []
@@ -345,7 +345,7 @@ class ShrimpGroupTracker:
     def _update_tracks(self, candidates: List[Tuple[int, int, int, int, float]]) -> List[TrackedShrimp]:
         """
         Associates candidates across consecutive frames with temporal validation.
-        Eliminates single-frame noise transients and tracks persistent shrimp individuals.
+        Suppresses one-frame candidates; identity and species accuracy require evaluation.
         """
         updated_tracks: Dict[int, TrackedShrimp] = {}
         used_candidates = set()
@@ -571,7 +571,7 @@ class ShrimpGroupTracker:
                 end_pt = (int(cx + vx * 3), int(cy + vy * 3))
                 cv2.arrowedLine(canvas, (cx, cy), end_pt, (0, 255, 255), 2, tipLength=0.3)
 
-            label = f"School #{group.group_id} ({group.shrimp_count} shrimp)"
+            label = f"Cluster #{group.group_id} ({group.shrimp_count} candidates)"
             (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
             cv2.rectangle(canvas, (cx - 5, cy - 25), (cx + tw + 5, cy - 5), (20, 20, 20), -1)
             cv2.putText(canvas, label, (cx, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2, cv2.LINE_AA)
@@ -581,10 +581,10 @@ class ShrimpGroupTracker:
             x1, y1, x2, y2 = shrimp.bbox
             if shrimp.group_id >= 0:
                 color = self.group_palette[shrimp.group_id % len(self.group_palette)]
-                label = f"Shrimp #{shrimp.shrimp_id} [Grp #{shrimp.group_id}]"
+                label = f"Candidate #{shrimp.shrimp_id} [Grp #{shrimp.group_id}]"
             else:
-                color = (0, 215, 255)  # Bright amber for verified solitary shrimp
-                label = f"Shrimp #{shrimp.shrimp_id}"
+                color = (0, 215, 255)  # Bright amber for unclustered candidates
+                label = f"Candidate #{shrimp.shrimp_id}"
 
             cv2.rectangle(canvas, (x1, y1), (x2, y2), color, 2, lineType=cv2.LINE_AA)
             cv2.circle(canvas, (shrimp.centroid[0], shrimp.centroid[1]), 4, color, -1)
@@ -641,12 +641,12 @@ class ShrimpGroupTracker:
         target_info = "Scanning..."
         if groups:
             top_group = max(groups, key=lambda g: g.shrimp_count)
-            target_info = f"School #{top_group.group_id} at {top_group.centroid}"
+            target_info = f"Cluster #{top_group.group_id} at {top_group.centroid}"
         elif shrimps:
             # If solitary feeding shrimp, point directly to their center
             c_x = int(np.mean([s.centroid[0] for s in shrimps]))
             c_y = int(np.mean([s.centroid[1] for s in shrimps]))
-            target_info = f"Feeding Zone at ({c_x}, {c_y})"
+            target_info = f"Candidate centroid at ({c_x}, {c_y})"
 
         v_id = metadata.get("video_id", "LIVE").upper() if metadata else "LIVE"
         raw_depth = metadata.get("depth_map_mean", metadata.get("depth_m", "N/A")) if metadata else "N/A"
@@ -658,14 +658,15 @@ class ShrimpGroupTracker:
         clip = metadata.get("clahe_clip_limit", 2.5) if metadata else 2.5
         eps = metadata.get("dbscan_eps", self.dbscan_eps) if metadata else self.dbscan_eps
 
+        min_pts = metadata.get("dbscan_min_samples", self.dbscan_min_samples) if metadata else self.dbscan_min_samples
         lines = [
             (f"AQUAEYE VISION | {v_id}", (0, 215, 255), 0.50, 2),
             (f"Depth: {depth_str}m | Noise: {noise} | CLAHE: {clip:.1f}", (200, 200, 200), 0.38, 1),
-            (f"DBSCAN Radius: {eps:.1f}px | MinPts: {self.dbscan_min_samples}", (200, 200, 200), 0.38, 1),
-            (f"Verified Shrimp: {total_shrimp}", (50, 255, 50) if total_shrimp > 0 else (255, 255, 255), 0.44, 2 if total_shrimp > 0 else 1),
-            (f"Active Schools: {num_groups}", (50, 255, 50), 0.42, 1),
-            (f"Largest School: {largest_group} shrimp", (255, 255, 255), 0.42, 1),
-            (f"Feeder Target: {target_info}", (0, 255, 255), 0.40, 1),
+            (f"DBSCAN Radius: {eps:.1f}px | MinPts: {min_pts}", (200, 200, 200), 0.38, 1),
+            (f"Candidates (unvalidated): {total_shrimp}", (50, 255, 50) if total_shrimp > 0 else (255, 255, 255), 0.44, 2 if total_shrimp > 0 else 1),
+            (f"Active Clusters: {num_groups}", (50, 255, 50), 0.42, 1),
+            (f"Largest Cluster: {largest_group} candidates", (255, 255, 255), 0.42, 1),
+            (f"Cluster location: {target_info}", (0, 255, 255), 0.40, 1),
         ]
 
         y_offset = 28

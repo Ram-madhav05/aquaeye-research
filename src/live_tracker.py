@@ -7,7 +7,7 @@ Processes real-time underwater video feeds from:
 
 Features:
 - Real-time 40-50+ FPS tracking with multiscale resolution pyramid
-- Live HUD overlay with depth, noise filter, verified shrimp count, and active schools
+- Live HUD overlay with depth, noise filter, candidate count, and active schools
 - Live feeder target reticle pointing to the highest biomass centroid
 - Keyboard shortcuts:
   [Q / ESC] Quit stream
